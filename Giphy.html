@@ -1,0 +1,230 @@
+<!-- Purpose of this code is to dynamically generate buttons using only jQuery (i.e. no hardcoded html buttons) -->
+<html>
+<head>
+	<title>Favorite Movies</title>
+	<style type="text/css">
+		button, div, form, input {
+			margin: 10px;
+		}
+		body { background-color: black; color : teal;}
+	</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Giphy Fun </h1>
+
+  <div id="displayButtons">
+
+  </div>
+
+  
+  <form id="giphy-form">
+    <label for="giphy-input">Add a Giphy </label>
+    <input type="text" id="giphy-input"><br>
+    
+    <!-- Button triggers new movie to be added -->
+    <input id="addgifs" type="submit" value="Add A Giphy">
+  </form>
+
+
+  <div id="displayGifs">
+
+  </div>
+
+<script src='http://code.jquery.com/jquery-2.1.3.min.js'></script>
+<script type="text/javascript">
+
+	// Initial array of movies
+	var topics = ['Messie Goals ', 'Best Dunks', 'Basketball Shots', 'Famous Touchdowns', 'Best football catches'];
+
+	var results_still;
+    var results_animated;
+
+	//debugger;
+	function renderButtons(){ 
+
+			$('#displayButtons').empty();
+
+		for (var k= 0; k< topics.length; k++)
+		{
+
+			var b = $('<button>');
+
+			b.addClass('giphyButton');
+
+			b.attr('data-name', topics[k]);
+
+			b.text(topics[k]);
+
+			console.log(b);
+
+			$('#displayButtons').append(b);
+			
+		}
+
+	}
+
+	// ========================================================
+
+	// This function handles events where one button is clicked
+	$('#addgifs').on('click', function(){
+
+		//debugger;
+
+		var topic = $('#giphy-input').val().trim();
+
+		console.log(topic);
+
+		topics.push(topic);
+
+		renderButtons();
+
+		eventlistener();
+
+
+		return false;
+
+	})
+
+	function getRandomInt(min, max) {
+  		return Math.floor(Math.random() * (max - min + 1)) + min;
+
+	}
+
+
+
+	function eventlistener()
+	{
+		
+
+	$('.giphyButton').on('click', function()
+
+	{
+		console.log('im here');
+
+		$('#displayGifs').empty();
+
+		var search = $(this).attr('data-name');
+
+	
+		 var queryURL =  "http://api.giphy.com/v1/gifs/search?q="+search+ "&api_key=dc6zaTOxFJmzC";
+
+      $.ajax({url: queryURL, method: 'GET'})
+
+    
+      .done(function(result) {
+
+      	console.log(result);
+
+  		
+
+       
+
+       	for (var counter = 0; counter<10; counter++)
+
+
+       	{
+			j = getRandomInt(0,24);
+
+			console.log(j);
+       	
+        results_still = result.data[j].images.original_still.url;
+
+        results_animated = result.data[j].images.original.url
+
+
+        var image = $('<img>');
+
+			image.addClass('giffy');
+
+			image.attr('src', results_still);
+
+			image.attr('data-state', 'still');
+
+		var imageDiv = $('<div>');
+			 imageDiv.addClass('idiv');
+
+		 $('.idiv').append(image);
+
+        $('#displayGifs').append(imageDiv);
+
+
+        console.log(image);
+
+        console.log(image.attr('data-state'));
+                    
+     
+    	}
+
+		})
+
+      })
+
+	gif_click();
+
+
+
+	}
+
+
+	function gif_click()
+
+	{
+
+		//$("#initialchoice img")
+
+	 $('#displayGifs .idiv').on('click', function(){
+
+
+	 		console.log("i clicked on a gif!");
+            
+            var state = $(this).attr('data-state'); // assigning the data state of the clicked element to var state 
+            console.log(state);
+
+                if (state === 'still') 
+
+                {
+                    console.log('im at still ');
+
+                    console.log($(this).attr('src'));
+
+                    $(this).attr('src', $(this).attr(results_animated)); // setting the src 
+                    $(this).attr('data-state', 'animate'); // setting the data-state
+                }
+
+                 else if (state != 'still')
+
+                 {
+                    console.log('im not at still ');
+
+                    $(this).attr('src', $(this).attr('data-still'));
+                    $(this).attr('data-state', 'still');
+                }
+
+          
+        });
+
+	}
+
+
+
+
+
+
+
+	
+	renderButtons();
+	eventlistener();
+	//gif_click();
+
+
+
+
+	
+
+</script>
+
+
+</body>
+</html>
