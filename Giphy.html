@@ -33,7 +33,7 @@
 
   <div id="displayGifs"></div>
 
-<script src='http://code.jquery.com/jquery-2.1.3.min.js'></script>
+<script src='https://code.jquery.com/jquery-2.1.3.min.js'></script>
 <script type="text/javascript">
 
 	// Initial array of movies
@@ -110,7 +110,7 @@
 
 			var search = $(this).attr('data-name');
 
-			var queryURL =  "http://api.giphy.com/v1/gifs/search?q="+search+ "&api_key=dc6zaTOxFJmzC";
+			var queryURL =  "https://api.giphy.com/v1/gifs/search?q="+search+ "&api_key=dc6zaTOxFJmzC";
 
 	      	$.ajax({url: queryURL, method: 'GET'})  
 	      	.done(function(result) 
