@@ -3,10 +3,15 @@
 <head>
 	<title>Favorite Movies</title>
 	<style type="text/css">
+		h1 {text-align: center; font-size: 40px; color: white;}
 		button, div, form, input {
 			margin: 10px;
 		}
 		body { background-color: black; color : teal;}
+
+		#giphy-form { font-size: 25px; }
+		#outerDiv { font-size: 20px; }
+		#addgifs{font-size: 20px;}
 	</style>
 </head>
 <body>
@@ -15,43 +20,42 @@
   <h1>Giphy Fun </h1>
 
   <div id="displayButtons">
-
   </div>
 
   
   <form id="giphy-form">
-    <label for="giphy-input">Add a Giphy </label>
+    <label for="giphy-input"> <strong>Add A Giphy</strong></label>
     <input type="text" id="giphy-input"><br>
     
     <!-- Button triggers new movie to be added -->
-    <input id="addgifs" type="submit" value="Add A Giphy">
+    <input id="addgifs" type="submit" value="Submit">
   </form>
 
-
-  <div id="displayGifs">
-
-  </div>
+  <div id="displayGifs"></div>
 
 <script src='http://code.jquery.com/jquery-2.1.3.min.js'></script>
 <script type="text/javascript">
 
 	// Initial array of movies
-	var topics = ['Messie Goals ', 'Best Dunks', 'Basketball Shots', 'Famous Touchdowns', 'Best football catches'];
+	var topics = ['Messie Goals ', 'Best Dunks', 'Best Basketball Shots', 'Best Touchdowns', 'Best football catches', 'Best Olympics Moments','Best Cricket Catches',
+		 'Kobe Bryant', 'Ronaldo Goals', 'Steph Curry'];
 
 	var results_still;
     var results_animated;
     var imageArray = new Array;
+   	var imageObject ;
+   	var gifDiv;
+   	var gifRating;
 
-   var imageObject ;
 
-	//debugger;
-	function renderButtons(){ 
+	function renderButtons()
+
+	{ 
 
 			$('#displayButtons').empty();
 
 		for (var k= 0; k< topics.length; k++)
 		{
-
 			var b = $('<button>');
 
 			b.addClass('giphyButton');
@@ -65,29 +69,24 @@
 			$('#displayButtons').append(b);
 			
 		}
-
 		eventlistener();
-
 	}
 
 	// ========================================================
 
-	// This function handles events where one button is clicked
+	// This function handles adding gifs when user inputs customized giffy
 	$('#addgifs').on('click', function(){
 
 		var topic = $('#giphy-input').val().trim();
-
-		console.log(topic);
 
 		topics.push(topic);
 
 		renderButtons();
 
-		eventlistener();
-
 		return false;
 
 	})
+
 
 	function getRandomInt(min, max) {
   		return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -100,74 +99,72 @@
 	{
 		
 
-	$('.giphyButton').on('click', function()
+		$('.giphyButton').on('click', function()
 
-	{
-		console.log('im here');
+		{
+			console.log('im here');
 
-		$('#displayGifs').empty();
+			$('#displayGifs').empty();
 
-		imageArray = [];
+			imageArray = [];
 
-		var search = $(this).attr('data-name');
+			var search = $(this).attr('data-name');
 
-	
-		 var queryURL =  "http://api.giphy.com/v1/gifs/search?q="+search+ "&api_key=dc6zaTOxFJmzC";
+			var queryURL =  "http://api.giphy.com/v1/gifs/search?q="+search+ "&api_key=dc6zaTOxFJmzC";
 
-      $.ajax({url: queryURL, method: 'GET'})  
-      	.done(function(result) {
+	      	$.ajax({url: queryURL, method: 'GET'})  
+	      	.done(function(result) 
 
-      	console.log(result);
+	      	{
 
-       	for (var counter = 0; counter<10; counter++)
+	      		console.log(result);
 
+	       		for (var counter = 0; counter<10; counter++)
 
-       	{
-			j = getRandomInt(0,24);
+       			{
+					j = getRandomInt(0,24);
 
-			console.log(j);
+					console.log(j);
 
-			 imageObject = 
+					 imageObject = 
 
-			{
-				results_still : result.data[j].images.original_still.url,
+						{
+						results_still : result.data[j].images.original_still.url,
 
-        		results_animated : result.data[j].images.original.url
-        		
+		        		results_animated : result.data[j].images.original.url,
 
-    		};
-
-	
-        var image = $('<img>');
-
-			image.addClass('giffy');
-
-			image.attr("id", counter);
-
-			image.attr('src', imageObject.results_still);
-
-			image.attr('data-state', 'still');
+		        		results_rating: result.data[j].rating
+		    			};
 
 	
-		imageArray.push(imageObject);
+		        	var image = $('<img>');
 
-        $('#displayGifs').append(image);
+					image.addClass('giffy');
+
+					image.attr("id", counter);
+
+					image.attr('src', imageObject.results_still);
+
+					image.attr('data-state', 'still');
+
+					imageArray.push(imageObject);
+
+					gifDiv = $('<div>').append(image);
+		   			gifRating = $('<div>').append("Rating: " +result.data[j].rating);
 
 
-        console.log(image);
+			    	$('#displayGifs').append(gifRating,gifDiv);
 
-        console.log(image.attr('data-state'));
+			        console.log(image);
+
+			        console.log(image.attr('data-state'));
                     
-     
-    	}
+    			}
 
-		});
+			});
 
-      });
-
-	gif_click();
-
-
+      	});
+				gif_click();
 
 	}
 
@@ -177,13 +174,12 @@
 	{
 		console.log("i clicked in function!");
 
-	 $('#displayGifs').on('click', ".giffy", function(){
+	 $('#displayGifs').unbind().on('click', ".giffy", function(){
 
 	 		console.log("i clicked on a gif!");
             
-            var state = $(this).attr('data-state'); // assigning the data state of the clicked element to var state 
+            var state = $(this).attr('data-state'); 
             console.log(state);
-
 
             console.log($(this).attr("id"));
 
@@ -196,7 +192,7 @@
                     $(this).attr('data-state', 'animate'); // setting the data-state
                 }
 
-                 else if (state != 'still')
+                 else if (state === 'animate')
 
                  {
                     console.log('im not at still ');
@@ -210,15 +206,8 @@
 
 	}
 
-
-
 	renderButtons();
-	//eventlistener();
-	//gif_click();
-
-
 	
-
 </script>
 
 
