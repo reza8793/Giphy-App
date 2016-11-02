@@ -1,7 +1,7 @@
-<!-- Purpose of this code is to dynamically generate buttons using only jQuery (i.e. no hardcoded html buttons) -->
+
 <html>
 <head>
-	<title>Favorite Movies</title>
+	<title>Giphy App </title>
 	<style type="text/css">
 		h1 {text-align: center; font-size: 40px; color: white;}
 		button, div, form, input {
@@ -187,7 +187,6 @@
 
                 {
                     console.log('im at still '+imageArray[$(this).attr("id")].results_animated);
-
                     $(this).attr('src', imageArray[$(this).attr("id")].results_animated); 
                     $(this).attr('data-state', 'animate'); // setting the data-state
                 }
@@ -196,7 +195,6 @@
 
                  {
                     console.log('im not at still ');
-
                     $(this).attr('src', imageArray[$(this).attr("id")].results_still);
                     $(this).attr('data-state', 'still');
                 }
