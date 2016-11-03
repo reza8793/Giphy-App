@@ -7,7 +7,7 @@
 		button, div, form, input {
 			margin: 10px;
 		}
-		body { background-color: black; color : teal;}
+		body { background-image: url("assets/images/background-image.jpg"); color : black;}
 
 		#giphy-form { font-size: 25px; }
 		#outerDiv { font-size: 20px; }
@@ -51,11 +51,10 @@
 	function renderButtons()
 
 	{ 
-
 			$('#displayButtons').empty();
 
-		for (var k= 0; k< topics.length; k++)
-		{
+			for (var k= 0; k< topics.length; k++)
+			{
 			var b = $('<button>');
 
 			b.addClass('giphyButton');
@@ -64,11 +63,9 @@
 
 			b.text(topics[k]);
 
-			console.log(b);
-
 			$('#displayButtons').append(b);
 			
-		}
+			}
 		eventlistener();
 	}
 
@@ -94,15 +91,12 @@
 	}
 
 
-
 	function eventlistener()
 	{
 		
-
 		$('.giphyButton').on('click', function()
 
 		{
-			console.log('im here');
 
 			$('#displayGifs').empty();
 
@@ -116,15 +110,9 @@
 	      	.done(function(result) 
 
 	      	{
-
-	      		console.log(result);
-
 	       		for (var counter = 0; counter<10; counter++)
-
        			{
 					j = getRandomInt(0,24);
-
-					console.log(j);
 
 					 imageObject = 
 
@@ -154,11 +142,7 @@
 
 
 			    	$('#displayGifs').append(gifRating,gifDiv);
-
-			        console.log(image);
-
-			        console.log(image.attr('data-state'));
-                    
+ 
     			}
 
 			});
@@ -171,18 +155,12 @@
 
 	function gif_click()
 
-	{
-		console.log("i clicked in function!");
+	{	
 
 	 $('#displayGifs').unbind().on('click', ".giffy", function(){
 
-	 		console.log("i clicked on a gif!");
-            
             var state = $(this).attr('data-state'); 
-            console.log(state);
-
-            console.log($(this).attr("id"));
-
+           
                 if (state === 'still') 
 
                 {
@@ -198,7 +176,6 @@
                     $(this).attr('src', imageArray[$(this).attr("id")].results_still);
                     $(this).attr('data-state', 'still');
                 }
-
           
         });
 
